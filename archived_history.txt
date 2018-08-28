@@ -1,0 +1,356 @@
+commit 5d46d6969e74abe5e4fa6757512059aadfdcac85
+Author: Justin P Linick <Justin.P.Linick@jpl.nasa.gov>
+Date:   Tue Sep 12 10:12:01 2017 -0700
+
+    using backup temp url when scihub is down
+
+commit dfb7c38cb986c55fb2adcb59dd492e4da0579aba
+Author: Justin P Linick <Justin.P.Linick@jpl.nasa.gov>
+Date:   Tue Sep 12 09:59:28 2017 -0700
+
+    adding backup for temporary endpoint
+
+commit 6d2c07b8871262afe8857adf2427b533a961455e
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Apr 13 13:43:27 2017 +0000
+
+    added opensearch endpoint and use that as default since acquisitions are published there faster than dhus
+
+commit 3edef0feb2d99077c4e3ed1a2145975c7cd7f2ce
+Author: Justin P Linick <Justin.P.Linick@jpl.nasa.gov>
+Date:   Wed Feb 22 05:01:03 2017 -0800
+
+    upadte to v2 query
+
+commit 2430a94e4bd58d61574cbc24618a2dca6b8b6195
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Feb 7 21:03:58 2017 +0000
+
+    no longer passing creds on command line
+
+commit 50d9d5cecdd12e3e08ff1f916bf4b5348b355dd7
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Nov 16 15:01:38 2016 +0000
+
+    generalize odata search for S1A or S1B
+
+commit 2e3cf70c984f64261d248422954e6c39366bebef
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Oct 19 18:03:38 2016 +0000
+
+    handle S1* and raise error if extraction of date fails
+
+commit 2eb47f168065818b1752d6daca5f8f2c59cdb5be
+Author: Justin P Linick <Justin.P.Linick@jpl.nasa.gov>
+Date:   Mon Oct 10 10:26:30 2016 -0700
+
+    Update to retrieve S1B
+
+commit 61afef222fe86acab714d25f706b3ed6df888f62
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Aug 25 20:12:14 2016 +0000
+
+    send actual url, not the template
+
+commit 9b92dc2a3f935c431536e2879c479b01ab27b730
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Aug 25 20:03:10 2016 +0000
+
+    enable geospatial querying of SciHub
+    
+    Changed default handler to SciHubODATAStub.
+    Add .gitignore.
+
+commit 21be26401a52bb8e7053b0f385e26cc4b78f957d
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Aug 15 19:54:09 2016 +0000
+
+    relax substring filter on SLC products (initially only 1SSV - single VV+HH polarization)
+
+commit 5a92a94d59530147080ced554e60354231162e41
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Aug 15 19:53:04 2016 +0000
+
+    handle bad URLs returned from SciHub ODATA API
+
+commit 0b78d6e7ca89768ff26b80ec148e446a9b3558fb
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Mon May 2 20:14:02 2016 +0000
+
+    remove legacy sentinel metadata extraction and swath splitting code
+
+commit eabdcdbddc6e031b01bd44e9f3b3e6cd812b2b1d
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Mon Apr 25 20:38:23 2016 +0000
+
+    mstarch: working revised scihub
+
+commit 66205a280f4c929836b95b3b9820fbb791750ec1
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Mon Apr 25 17:50:53 2016 +0000
+
+    mstarch: adding getHandler for new module additions
+
+commit 61e4b6d8108bea70671632ba7c4547e356b7985f
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Thu Apr 21 20:42:22 2016 +0000
+
+    mstarch: adding back in libs for spyder-extract
+
+commit c7fbd5d18fb7ca2ca6691992333a705dfd5f537a
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Wed Apr 20 23:19:57 2016 +0000
+
+    mstarch: added shapely to dependencies
+
+commit 7bff29ad977e1679388192194decb426a0bf48ea
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Wed Apr 20 23:19:02 2016 +0000
+
+    mstarch: pagnating scihub query for odata
+
+commit 6caa1cd0649ece86006dc5e716160cfd735db267
+Author: M Starch <lestarch@googlemail.com>
+Date:   Wed Apr 20 14:42:06 2016 -0700
+
+    mstarch: scihub odata work
+
+commit 7b8b5ddddd3c3674c21810174e0401a99de4b064
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Thu Jan 14 17:41:21 2016 +0000
+
+    mstarch: removed bad dependency
+
+commit 2e23b85f409e40ca91588b90facd6299121f2329
+Author: M Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Wed Jan 13 23:55:30 2016 +0000
+
+    mstarch: making scihub a module
+
+commit 39dd17d93f9110f7e1a3aa2c4c7f10e9e21fe79f
+Author: M Starch <lestarch@googlemail.com>
+Date:   Wed Jan 13 15:17:42 2016 -0800
+
+    mstarch: cleaned up scihub query for new framework
+
+commit 75ff386dc9300a76fe50ee7435d39324788c8352
+Author: M Starch <lestarch@googlemail.com>
+Date:   Fri Dec 4 10:25:44 2015 -0800
+
+    mstarch: breaks out queries into individual jobs
+
+commit 60c9e103001aa2c57763af1c1150c8203721abf6
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Nov 17 17:56:42 2015 +0000
+
+    mstarch: query now reports response text
+
+commit ee8eabc96b5fbbd0832f0f53c297729623f44192
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Sat Oct 24 17:17:30 2015 +0000
+
+    set higher priority for subsequent sling jobs
+
+commit fd02e8737e554452fb41d7e04edf701a0e8f4454
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Oct 23 22:30:54 2015 +0000
+
+    no sentinel1a raw downloads
+
+commit 8409f70019100320a8d508f5cb80e2276ae99233
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Oct 13 15:43:25 2015 -0700
+
+    add script for ingest of localized S1A granules
+
+commit a9cc8f57ac38a986cda0bee4f27c01ab03766f8f
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Sep 24 02:06:43 2015 +0000
+
+    extract metadata and browse image
+
+commit 00457e2291bf1b3a28d7b3bf2e400e1b4f15834c
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Sep 22 01:08:58 2015 +0000
+
+    track number is set by FrameInfoExtractor
+
+commit cc75d350a1109a52f6773c533d56e173ae4e1e25
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Sep 22 00:20:30 2015 +0000
+
+    add dataset type to extractorInput.xml
+
+commit 66ac7df8769d781db3d190f7d92c7c58c41ffd87
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Sep 21 23:57:17 2015 +0000
+
+    extract dataset type
+
+commit 5e3f76af6d54f3e0add3651f0000c3a142ab9a1c
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Sep 21 20:24:17 2015 +0000
+
+    set track number
+
+commit fd250ab773706dd34d212731bd29e640bd4fa8bf
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Sep 21 19:35:38 2015 +0000
+
+    initial implementation of splitting S1A into swath products
+
+commit 52be55832f3ef97f80c1e3206c873022b7314ba6
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Sep 21 15:39:47 2015 +0000
+
+    update path to sentinel dir; initial import of Piyush's script
+
+commit 057c92fc04ae06be37cb2c696b399f8abe43880d
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Sat Sep 19 19:28:46 2015 +0000
+
+    remove .svn
+
+commit 6480e70bcc153698f24739d181f9b7cfe6606696
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Sat Sep 19 18:58:23 2015 +0000
+
+    import Piyush's code for sentinel processing
+
+commit d5425b41e8926c821f6edac0223e87ceb45bdbf1
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Sat Sep 5 00:01:26 2015 +0000
+
+    add prod_date
+
+commit 2495a62b2707ee4399cecdd5bfc2c5c1303e1103
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Sep 4 18:16:28 2015 +0000
+
+    make AOI query the default
+
+commit c0b7a21b0d5ddd4ab665de6de11c31b6fbe6b6cf
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Sep 4 16:04:18 2015 +0000
+
+    add query script using AOI products
+
+commit 5468408f4ba21ead60694ea895e5b827cd866c31
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Tue Sep 1 18:50:13 2015 +0000
+
+    organize by data source
+
+commit fc1d2c44546548b0ede649ecca9e04483a460422
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Mon Aug 31 17:26:40 2015 +0000
+
+    add file_type job parameter to help upstream validation
+
+commit 819b693138ab6d7a4e6ca50cfa84c2eb57f7fa2c
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 21:02:29 2015 +0000
+
+    set descriptive job name
+
+commit 06c6becfe19f652011c526c3de41810ae4cb0a13
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 04:44:36 2015 +0000
+
+    fixed string formats
+
+commit 633c87f117848f3b6f2dfb830fa4bffe286c9b66
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 03:52:38 2015 +0000
+
+    updated to submit sling jobs
+
+commit 2c1538a8e70e9c1178cefc7f8afcde8a495f3bd0
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 03:07:06 2015 +0000
+
+    fixed
+
+commit 3fe920c49563f41a842fa5e59c113bff903333aa
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 03:06:30 2015 +0000
+
+    fixed
+
+commit 200d684596e600b696e0a15246e5fe199bb8a499
+Author: Gerald Manipon <gmanipon@jpl.nasa.gov>
+Date:   Fri Aug 28 03:03:18 2015 +0000
+
+    updated to work with spyddder-man
+
+commit 9e85d5269f9515089c5e98fc49eed86cc0d9771b
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Aug 26 19:45:16 2015 +0000
+
+    added Okmok Volcano
+
+commit 64c10e06493c8eb3eee66c10eb34f0273e4030d5
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Aug 26 17:28:01 2015 +0000
+
+    generalized to pull metadata from manifest.safe; set browse image for SLC product
+
+commit 66823e7dae6a1a6a3c3513692b904adf71db55b7
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Aug 19 22:01:13 2015 +0000
+
+    mstarch: perfected extractor
+
+commit ae1072ba43a32652ccec73e64834757ef2c55f10
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Wed Aug 19 19:16:07 2015 +0000
+
+    mstarch: mostly working scihub downloader
+
+commit b7b92e7d559c8dc53e57c46da69af63b55b1d75f
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Aug 13 20:43:02 2015 +0000
+
+    mstarch: test code ready for pass-2 integration
+
+commit 34146c2e30c0f607210fa8437ff31a50f18b6fe1
+Author: M Starch <lestarch@googlemail.com>
+Date:   Thu Aug 13 10:01:08 2015 -0700
+
+    mstarch: fixing download and metadata extraction
+
+commit b9cdc8f0048c3149b971ab0275f34e7b8338876b
+Author: gmanipon <gmanipon@jpl.nasa.gov>
+Date:   Thu Aug 13 16:05:39 2015 +0000
+
+    mstarch: integration pass-1 fixes
+
+commit 1f99c2b0fea7f77a02a04f43a2a3926603316d93
+Author: Michael D Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Thu Aug 6 23:21:13 2015 +0000
+
+    mstarch: ready to start-up sentinel 1A
+
+commit d2736a44f2677d7722225d767cf7767c2a6ac31f
+Author: M Starch <lestarch@googlemail.com>
+Date:   Wed Aug 5 08:34:36 2015 -0700
+
+    mstarch: latest revision
+
+commit d6d488726ef2fe2ff14dc9a42ff18f9813104b59
+Author: Michael D Starch <Michael.D.Starch@jpl.nasa.gov>
+Date:   Mon Aug 3 17:36:53 2015 +0000
+
+    mstarch: starting to debug
+
+commit ee524facee8f7000584255f24dc59fbf015aafd6
+Author: M Starch <lestarch@googlemail.com>
+Date:   Wed Jul 29 11:32:15 2015 -0700
+
+    mstarch: working copy for testing
+
+commit 7614ae0ea04e4b732ea04ba2b97ec09a5b54d6ae
+Author: M Starch <lestarch@googlemail.com>
+Date:   Mon Jul 27 12:14:14 2015 -0700
+
+    mstarch: initial implementation
