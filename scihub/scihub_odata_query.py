@@ -10,6 +10,8 @@ import sys
 import requests
 from requests.auth import HTTPBasicAuth
 from shapely.geometry.polygon import Polygon
+from urlparse import urljoin
+
 
 import qquery.query
 import xml.dom.minidom
@@ -20,7 +22,8 @@ This worker queries slc products from scihub copernicus
 '''
 
 #Global constants
-url = "https://scihub.copernicus.eu/apihub/odata/v1/Products/?"
+DEFAULT_DNS = "https://scihub.copernicus.eu/"
+API_PATH = "apihub/odata/v1/"
 dtreg = re.compile(r'S1\w_.+?_(\d{4})(\d{2})(\d{2})T.*')
 QUERY_TEMPLATE = "IngestionDate ge datetime'{0}' and IngestionDate lt datetime'{1}' and substringof('SLC',Name)"
 
@@ -28,7 +31,7 @@ class SciHubODATA(qquery.query.AbstractQuery):
     '''
     Sci-hub query implementer
     '''
-    def query(self,start,end,aoi):
+    def query(self,start,end,aoi,dns_alias):
         '''
         Performs the actual query, and returns a list of (title, url) tuples
         @param start - start time stamp
@@ -38,7 +41,8 @@ class SciHubODATA(qquery.query.AbstractQuery):
         '''
         session = requests.session()
         qur = QUERY_TEMPLATE.format(start,end)
-        return self.listAll(session,qur,aoi["location"]["coordinates"])
+
+        return self.listAll(session,qur,aoi["location"]["coordinates"], dns_alias)
     @staticmethod
     def getDataDateFromTitle(title):
         '''
@@ -64,20 +68,24 @@ class SciHubODATA(qquery.query.AbstractQuery):
         '''
         return "scihub"
     #Non-required helpers
-    def listAll(self,session,query,bbox):
+    def listAll(self,session,query,bbox, dns_alias):
         '''
         Lists the server for all products matching a query. 
         NOTE: this function also updates the global JSON querytime persistence file
         @param session - session to use for listing
         @param query - query to use to list products
         @param bbox - bounding box from AOI
+        @param dns_alias - dns_alias to use if any
         @return list of (title,link) tuples
         '''
+        dns = DEFAULT_DNS if dns_alias is None else dns_alias
+        url_api = urljoin(dns, API_PATH)
+
         found=[]
         offset = 0
         loop = True
         while loop:
-            response = session.get(url,params={"$filter":query,"$skip":offset,"$top":100,"$format":"json"})
+            response = session.get(urljoin(url_api, "Products/?"), params={"$filter":query, "$skip":offset, "$top":100,"$format":"json"})
             if response.status_code != 200:
                 print("Error: %s\n%s" % (response.status_code,response.text))
                 raise qquery.query.QueryBadResponseException("Bad status")
@@ -90,7 +98,7 @@ class SciHubODATA(qquery.query.AbstractQuery):
                 if self.intersects(item["ContentGeometry"],bbox):
                     # Hack to rewrite URL because API gives wrong URL
                     download_url=item["__metadata"]["media_src"]
-                    download_url=download_url.replace("https://scihub.copernicus.eu/odata/v1","https://scihub.copernicus.eu/apihub/odata/v1")
+                    download_url=download_url.replace("https://scihub.copernicus.eu/odata/v1", url_api)
                     found.append((item["Name"],download_url))
 
                     # found.append((item["Name"],item["__metadata"]["media_src"]))

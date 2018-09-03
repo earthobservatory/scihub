@@ -12,6 +12,7 @@ import logging
 import urllib
 from requests.auth import HTTPBasicAuth
 from shapely.geometry.polygon import Polygon
+from urlparse import urljoin
 
 import qquery.query
 import xml.dom.minidom
@@ -27,9 +28,10 @@ This worker queries slc products from scihub copernicus
 '''
 
 #Global constants
-url = "https://scihub.copernicus.eu/apihub/search?"
-download_url = "https://scihub.copernicus.eu/apihub/odata/v1/Products('{}')/$value"
-backup_url = "https://tmphub.copernicus.eu/apihub/search?"
+DEFAULT_DNS = "https://scihub.copernicus.eu/"
+SEARCH_PATH = "apihub/search?"
+DOWNLOAD_PATH = "apihub/odata/v1/Products('{}')/$value"
+BACKUP_URL = "https://tmphub.copernicus.eu/apihub/search?"
 dtreg = re.compile(r'S1\w_.+?_(\d{4})(\d{2})(\d{2})T.*')
 S1_QUERY_TEMPLATE = 'IW AND producttype:SLC AND platformname:Sentinel-1 AND ' + \
                  'ingestiondate:[{0} TO {1}] AND ' + \
@@ -41,7 +43,7 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
     '''
     Sci-hub query implementer
     '''
-    def query(self,start,end,aoi,mapping='S1_IW_SLC'):
+    def query(self,start,end,aoi,dns_alias,mapping='S1_IW_SLC'):
         '''
         Performs the actual query, and returns a list of (title, url) tuples
         @param start - start time stamp
@@ -54,10 +56,10 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
         if mapping == "S1_IW_SLC":
             polygon = ",".join(["%s %s" % (i[0], i[1]) for i in aoi["location"]["coordinates"][0]])
             qur = S1_QUERY_TEMPLATE.format("%sZ" % start,"%sZ" % end, polygon)
-            return self.listAll(session,qur,aoi["location"]["coordinates"])
+            return self.listAll(session,qur,aoi["location"]["coordinates"],dns_alias)
         elif mapping == "GRD":
             qur = GRD_QUERY_TEMPLATE.format(polygon,"%sZ" % start,"%sZ" % end)
-            return self.listAll(session,qur)
+            return self.listAll(session,qur,dns_alias=dns_alias)
 
 
     @staticmethod
@@ -87,15 +89,18 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
         return "scihub"
 
     #Non-required helpers
-    def listAll(self,session,query,bbox):
+    def listAll(self,session,query,bbox,dns_alias):
         '''
         Lists the server for all products matching a query. 
         NOTE: this function also updates the global JSON querytime persistence file
         @param session - session to use for listing
         @param query - query to use to list products
         @param bbox - bounding box from AOI
+        @param dns_alias - dns_alias to use if any
         @return list of (title,link) tuples
         '''
+        dns = DEFAULT_DNS if dns_alias is None else dns_alias
+        url_search = urljoin(dns, SEARCH_PATH)
         found=[]
         offset = 0
         loop = True
@@ -103,7 +108,7 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
             query_params = { "q": query, "rows": 100, "format": "json", "start": offset }
             logger.info("query: %s" % json.dumps(query_params, indent=2))
             try:
-                response = session.get(url, params=query_params, verify=False)
+                response = session.get(url_search, params=query_params, verify=False)
                 logger.info("url: %s" % response.url)
                 if response.status_code != 200:
                     logger.error("Error: %s\n%s" % (response.status_code,response.text))
@@ -111,7 +116,7 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
                 logger.info("response text: %s" % response.text)
                 results = response.json()
             except:
-                response = session.get(backup_url, params=query_params, verify=False, auth=('guest', 'guest'))
+                response = session.get(BACKUP_URL, params=query_params, verify=False, auth=('guest', 'guest'))
                 logger.info("querying backup_url: %s" % response.url)
                 if response.status_code != 200:
                     logger.error("Error: %s\n%s" % (response.status_code,response.text))
@@ -131,6 +136,7 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
             logger.info("Found: {0} results".format(count))
             for item in entries:
                 print(item)
+                download_url = urljoin(dns, DOWNLOAD_PATH)
                 dl_url = download_url.format(item['id'])
                 name = item['title']
                 found.append((name,dl_url))

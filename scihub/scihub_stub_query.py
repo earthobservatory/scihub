@@ -12,6 +12,7 @@ import logging
 import urllib
 from requests.auth import HTTPBasicAuth
 from shapely.geometry.polygon import Polygon
+from urlparse import urljoin
 
 import qquery.query
 import xml.dom.minidom
@@ -27,8 +28,11 @@ This worker queries slc products from scihub copernicus
 '''
 
 #Global constants
-url = "https://scihub.copernicus.eu/dhus/api/stub/products?"
-download_url = "https://scihub.copernicus.eu/dhus/odata/v1/Products('{}')/$value"
+DEFAULT_DNS = "https://scihub.copernicus.eu/"
+SEARCH_PATH = "dhus/api/stub/products?"
+DOWNLOAD_PATH = "dhus/odata/v1/Products('{}')/$value"
+# url = "https://scihub.copernicus.eu/dhus/api/stub/products?"
+# download_url = "https://scihub.copernicus.eu/dhus/odata/v1/Products('{}')/$value"
 dtreg = re.compile(r'S1\w_.+?_(\d{4})(\d{2})(\d{2})T.*')
 S1_QUERY_TEMPLATE = '( footprint:"Intersects(POLYGON(({0})))" ) AND ( beginPosition:[{1} TO {2}] AND endPosition:[{1} TO {2}] ) AND ( platformname:Sentinel-1 AND producttype:SLC )'
 GRD_QUERY_TEMPLATE = '( ( beginPosition:[{1} TO {2}] AND endPosition:[{1} TO {2}] ) AND ( producttype:GRD )'
@@ -38,7 +42,7 @@ class SciHubODATAStub(qquery.query.AbstractQuery):
     '''
     Sci-hub query implementer
     '''
-    def query(self,start,end,aoi,mapping='S1_IW_SLC'):
+    def query(self,start,end,aoi,dns_alias,mapping='S1_IW_SLC'):
         '''
         Performs the actual query, and returns a list of (title, url) tuples
         @param start - start time stamp
@@ -51,10 +55,10 @@ class SciHubODATAStub(qquery.query.AbstractQuery):
         if mapping == "S1_IW_SLC":
             polygon = ",".join(["%s %s" % (i[0], i[1]) for i in aoi["location"]["coordinates"][0]])
             qur = S1_QUERY_TEMPLATE.format(polygon,"%sZ" % start,"%sZ" % end)
-            return self.listAll(session,qur,aoi["location"]["coordinates"])
+            return self.listAll(session,qur,aoi["location"]["coordinates"],dns_alias)
         elif mapping == "GRD":
             qur = GRD_QUERY_TEMPLATE.format(polygon,"%sZ" % start,"%sZ" % end)
-            return self.listAll(session,qur)
+            return self.listAll(session,qur,dns_alias=dns_alias)
 
 
     @staticmethod
@@ -84,7 +88,7 @@ class SciHubODATAStub(qquery.query.AbstractQuery):
         return "scihub"
 
     #Non-required helpers
-    def listAll(self,session,query,bbox):
+    def listAll(self,session,query,bbox,dns_alias):
         '''
         Lists the server for all products matching a query. 
         NOTE: this function also updates the global JSON querytime persistence file
@@ -93,13 +97,15 @@ class SciHubODATAStub(qquery.query.AbstractQuery):
         @param bbox - bounding box from AOI
         @return list of (title,link) tuples
         '''
+        dns = DEFAULT_DNS if dns_alias is None else dns_alias
+        url_search = urljoin(dns, SEARCH_PATH)
         found=[]
         offset = 0
         loop = True
         while loop:
             query_params = { "filter": query, "offset": offset, "limit": 100 }
             logger.info("query: %s" % json.dumps(query_params, indent=2))
-            query_url = url + "&".join(["%s=%s" % (i, query_params[i]) for i in query_params]).replace("(", "%28").replace(")", "%29")
+            query_url = url_search + "&".join(["%s=%s" % (i, query_params[i]) for i in query_params]).replace("(", "%28").replace(")", "%29")
             response = session.get(query_url)
             logger.info("url: %s" % response.url)
             if response.status_code != 200:
@@ -114,6 +120,7 @@ class SciHubODATAStub(qquery.query.AbstractQuery):
             loop = True if count > 0 else False
             logger.info("Found: {0} results".format(count))
             for item in results:
+                download_url = urljoin(dns, DOWNLOAD_PATH)
                 dl_url = download_url.format(item['uuid'])
                 name = item['identifier']
                 found.append((name,dl_url))
