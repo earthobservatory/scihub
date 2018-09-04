@@ -52,6 +52,7 @@ class SciHubOpenSearch(qquery.query.AbstractQuery):
         @mapping - type of product to queried. defaults to S1_IW_SLC
         @return: list of (title, url) pairs
         '''
+        print("###We came here")
         session = requests.session()
         if mapping == "S1_IW_SLC":
             polygon = ",".join(["%s %s" % (i[0], i[1]) for i in aoi["location"]["coordinates"][0]])
